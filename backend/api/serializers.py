@@ -11,12 +11,17 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'role', 'avatar', 'created_at']
         read_only_fields = ['id', 'created_at']
 
-class UserRegisterSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, validators=[validate_password])
+class UserRegisterSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True, min_length=8)
+    first_name = serializers.CharField(max_length=150, required=False)
+    last_name = serializers.CharField(max_length=150, required=False)
+    role = serializers.ChoiceField(choices=['employee', 'scrum_master'], default='employee')
     
-    class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'password', 'first_name', 'last_name', 'role']
+    def validate_email(self, value):
+        if User.objects.filter(email=value).exists():
+            raise serializers.ValidationError('This email is already registered.')
+        return value
     
     def create(self, validated_data):
         user = User.objects.create_user(
