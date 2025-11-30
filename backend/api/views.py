@@ -107,17 +107,36 @@ class ProjectViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'])
     def add_member(self, request, pk=None):
         project = self.get_object()
-        user_id = request.data.get('user_id')
+        email = request.data.get('email')
         role = request.data.get('role', 'member')
         
+        if not email:
+            return Response({'error': 'Email is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
         try:
-            user = User.objects.get(id=user_id)
-            member, created = ProjectMember.objects.get_or_create(
-                project=project, user=user, defaults={'role': role}
-            )
-            return Response(ProjectMemberSerializer(member).data)
+            # Try to find existing user by email
+            user = User.objects.get(email=email)
         except User.DoesNotExist:
-            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+            # Create a new user if they don't exist yet
+            try:
+                user = User.objects.create_user(
+                    email=email,
+                    username=email,
+                    password='TempPass123!',  # Temporary password, user should reset on first login
+                    role='employee'
+                )
+            except Exception as e:
+                return Response({'error': f'Failed to create user: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Check if user is already a member
+        if ProjectMember.objects.filter(project=project, user=user).exists():
+            return Response({'error': 'User is already a member of this project'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        # Add user to project
+        member = ProjectMember.objects.create(
+            project=project, user=user, role=role
+        )
+        return Response(ProjectMemberSerializer(member).data, status=status.HTTP_201_CREATED)
     
     @action(detail=True, methods=['get'])
     def board(self, request, pk=None):

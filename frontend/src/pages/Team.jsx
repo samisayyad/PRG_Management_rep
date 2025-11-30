@@ -64,12 +64,8 @@ export default function Team() {
     }
 
     try {
-      // First, get the user by email to find their ID
-      const usersRes = await projectsAPI.getMembers(memberFormData.projectId);
-      
-      // For now, we'll use a simplified approach - just add the member to the project
       await projectsAPI.addMember(memberFormData.projectId, {
-        user_id: memberFormData.email, // This would need to be looked up in a real app
+        email: memberFormData.email,
         role: 'member',
       });
 
