@@ -14,7 +14,9 @@ import {
   Plus,
   Search,
   ChevronDown,
-  LogOut
+  LogOut,
+  Menu,
+  ChevronLeft
 } from 'lucide-react';
 
 const navItems = [
@@ -33,6 +35,7 @@ export default function Layout({ children }) {
   const { user, logout } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const getInitials = (name) => {
     if (!name) return 'U';
@@ -46,13 +49,15 @@ export default function Layout({ children }) {
   return (
     <div className="min-h-screen">
       {/* Sidebar */}
-      <aside className="w-64 bg-gradient-to-b from-white via-white to-blue-50 border-r border-gray-100 flex flex-col fixed h-screen top-0 left-0 z-50 overflow-y-auto shadow-lg">
-        <div className="p-5 border-b border-gray-200">
-          <Link to="/dashboard" className="flex items-center gap-2">
+      <aside className={`bg-gradient-to-b from-white via-white to-blue-50 border-r border-gray-100 flex flex-col fixed h-screen top-0 left-0 z-50 overflow-y-auto shadow-lg transition-all duration-300 ease-in-out ${
+        sidebarOpen ? 'w-64' : 'w-20'
+      }`}>
+        <div className="p-5 border-b border-gray-200 flex items-center justify-between">
+          <Link to="/dashboard" className={`flex items-center gap-2 ${sidebarOpen ? '' : 'justify-center w-full'}`}>
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
               <Columns3 className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-lg text-gray-900">TaskFlow</span>
+            {sidebarOpen && <span className="font-bold text-lg text-gray-900">TaskFlow</span>}
           </Link>
         </div>
 
@@ -63,34 +68,50 @@ export default function Layout({ children }) {
               <Link
                 key={item.path}
                 to={item.path}
+                title={sidebarOpen ? '' : item.label}
                 className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium group ${
                   isActive
                     ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md'
                     : 'text-gray-600 hover:bg-gray-100 group-hover:bg-gray-50'
-                }`}
+                } ${sidebarOpen ? 'justify-start' : 'justify-center'}`}
               >
                 <item.icon className="w-5 h-5 flex-shrink-0" />
-                <span className="text-sm">{item.label}</span>
+                {sidebarOpen && <span className="text-sm">{item.label}</span>}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-4 border-t border-gray-200 mt-auto">
-          <div className="flex items-center gap-3 px-3 py-3 bg-gray-50 rounded-lg">
+        <div className="p-3 border-t border-gray-200 mt-auto space-y-2">
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="w-full flex items-center justify-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition-colors"
+            title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+          >
+            {sidebarOpen ? (
+              <ChevronLeft className="w-5 h-5 text-gray-600" />
+            ) : (
+              <Menu className="w-5 h-5 text-gray-600" />
+            )}
+          </button>
+          <div className={`flex items-center gap-3 px-3 py-3 bg-gray-50 rounded-lg ${sidebarOpen ? '' : 'justify-center'}`}>
             <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
               {getInitials(displayName)}
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
-              <p className="text-xs text-gray-500 capitalize">{user?.role === 'scrum_master' ? 'Scrum Master' : 'Employee'}</p>
-            </div>
+            {sidebarOpen && (
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-gray-900 truncate">{displayName}</p>
+                <p className="text-xs text-gray-500 capitalize">{user?.role === 'scrum_master' ? 'Scrum Master' : 'Employee'}</p>
+              </div>
+            )}
           </div>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className="ml-64 min-h-screen flex flex-col">
+      <div className={`min-h-screen flex flex-col transition-all duration-300 ease-in-out ${
+        sidebarOpen ? 'ml-64' : 'ml-20'
+      }`}>
         {/* Header */}
         <header className="bg-gradient-to-r from-white via-blue-50 to-white border-b border-gray-100 h-16 flex items-center justify-between px-8 sticky top-0 z-40 shadow-md backdrop-blur-sm">
           <div className="flex items-center gap-4 flex-1">
