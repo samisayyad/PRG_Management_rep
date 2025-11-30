@@ -47,7 +47,7 @@ export default function Layout({ children }) {
     : user?.email || 'User';
 
   return (
-    <div className="min-h-screen">
+    <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Sidebar */}
       <aside className={`bg-gradient-to-b from-white via-white to-blue-50 border-r border-gray-100 flex flex-col fixed h-screen top-0 left-0 z-50 overflow-y-auto shadow-lg transition-all duration-300 ease-in-out ${
         sidebarOpen ? 'w-64' : 'w-20'
@@ -112,11 +112,11 @@ export default function Layout({ children }) {
       </aside>
 
       {/* Main Content */}
-      <div className={`flex-1 min-h-screen flex flex-col transition-all duration-300 ease-in-out ${
+      <div className={`flex-1 flex flex-col transition-all duration-300 ease-in-out overflow-hidden ${
         sidebarOpen ? 'ml-64' : 'ml-20'
       }`}>
         {/* Header */}
-        <header className="bg-gradient-to-r from-white via-blue-50 to-white border-b border-gray-100 h-16 flex items-center justify-between px-8 sticky top-0 z-40 shadow-md backdrop-blur-sm">
+        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-8 flex-shrink-0 shadow-sm">
           <div className="flex items-center gap-4 flex-1">
             <div className="relative flex-1 max-w-xl">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
@@ -188,8 +188,10 @@ export default function Layout({ children }) {
         </header>
 
         {/* Page Content */}
-        <main className="flex-1 p-8 overflow-y-auto w-full">
-          {children}
+        <main className="flex-1 overflow-y-auto w-full">
+          <div className="p-8 max-w-7xl mx-auto">
+            {children}
+          </div>
         </main>
       </div>
     </div>
