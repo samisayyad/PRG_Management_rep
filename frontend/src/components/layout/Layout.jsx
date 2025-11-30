@@ -44,9 +44,9 @@ export default function Layout({ children }) {
     : user?.email || 'User';
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
+    <div className="min-h-screen bg-gray-50">
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-screen top-0 left-0 z-40 overflow-y-auto">
+      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-screen top-0 left-0 z-50 overflow-y-auto">
         <div className="p-5 border-b border-gray-200">
           <Link to="/dashboard" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -90,9 +90,9 @@ export default function Layout({ children }) {
       </aside>
 
       {/* Main Content */}
-      <div className="flex-1 ml-64">
+      <div className="ml-64 min-h-screen flex flex-col">
         {/* Header */}
-        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-8 sticky top-0 z-30 shadow-sm">
+        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-8 sticky top-0 z-40 shadow-sm">
           <div className="flex items-center gap-4 flex-1">
             <div className="relative flex-1 max-w-xl">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
