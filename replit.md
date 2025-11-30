@@ -14,15 +14,16 @@ TaskFlow is a comprehensive project management application inspired by Jira, fea
 - **Employee**: Limited access - view assigned tasks, update task status, track personal time
 
 ## Key Features Implemented
-✅ User authentication with JWT tokens and role selection  
-✅ Kanban board with drag-and-drop (DnD via @hello-pangea/dnd)  
+✅ **Authentication**: Beautiful redesigned login/register pages with gradient background, inline validation, and password visibility toggle
+✅ User registration and login with any email address (works with any credentials)
+✅ Kanban board with drag-and-drop functionality
 ✅ Sprint management and backlog planning  
 ✅ Calendar view for task deadlines  
 ✅ Analytics dashboard with productivity charts  
 ✅ Time tracking with timer functionality  
 ✅ Team management and performance metrics  
 ✅ Behavioral event tracking for analytics  
-✅ Role-based access control on API endpoints  
+✅ Role-based access control on API endpoints
 
 ## Project Structure
 ```
@@ -59,11 +60,36 @@ TaskFlow is a comprehensive project management application inspired by Jira, fea
 
 The frontend is accessible at http://localhost:5000 and proxies API calls to http://127.0.0.1:8000
 
+## Authentication & Getting Started
+
+### Create Your First Account
+1. Go to the login page (http://localhost:5000)
+2. Click "Create one" to go to registration
+3. Enter any email and password (minimum 8 characters)
+4. Choose your role: **Scrum Master** (for full access) or **Employee**
+5. Fill in your full name
+6. Confirm password and click "Create Account"
+7. You're logged in! Start exploring TaskFlow
+
+### Or Use Test Account
+- **Email**: `test@example.com`
+- **Password**: `TestPassword123!`
+- **Role**: Scrum Master
+
+### Key Authentication Features
+- ✅ Works with any email address
+- ✅ Password visibility toggle with eye icon
+- ✅ Inline validation for all fields
+- ✅ Real-time error messages
+- ✅ Smooth transitions between login/register modes
+- ✅ Beautiful gradient background with soft shadows
+- ✅ Mobile responsive design
+
 ## API Endpoints
 
 ### Authentication
-- `POST /api/auth/register/` - Register new user
-- `POST /api/auth/login/` - Login and get JWT tokens
+- `POST /api/auth/register/` - Register new user with any email
+- `POST /api/auth/login/` - Login with email and password
 - `POST /api/auth/refresh/` - Refresh access token
 - `GET /api/users/me/` - Get current user profile
 - `PUT /api/users/me/` - Update user profile
@@ -100,26 +126,73 @@ The frontend is accessible at http://localhost:5000 and proxies API calls to htt
 - `DATABASE_URL` - PostgreSQL connection string (auto-configured on Replit)
 - `SESSION_SECRET` - Django secret key (auto-configured on Replit)
 
-## Recent Fixes (Nov 30, 2025)
+## Recent Changes (Nov 30, 2025)
 
-### Fixed Issues ✅
-1. **Frontend-backend connection** - Updated Vite proxy to properly route to 127.0.0.1:8000
-2. **Tailwind CSS v4** - Fixed by installing @tailwindcss/postcss and updating config
-3. **Login endpoint** - Fixed to directly query users by email instead of relying on authenticate()
-4. **Registration endpoint** - Added better error handling and validation
-5. **User authentication** - Improved to use check_password() for secure verification
+### ✨ Major UI Redesign - Authentication Pages
+- **Beautiful gradient background** with soft blur effects
+- **Centered card layout** with shadow and border styling
+- **Enhanced form fields** with icons and proper spacing
+- **Real-time inline validation** with error messages and icons
+- **Password visibility toggle** with eye icon
+- **Separate register form** with full name and confirm password
+- **Error state display** with alert styling
+- **Made with Emergent badge** at the bottom
+- **Fully responsive** design for all screen sizes
 
-### Testing
-A test user has been created:
-- Email: `test@example.com`
-- Password: `TestPassword123!`
-- Role: `Scrum Master`
+### ✅ Fixed Issues
+1. **Authentication works with ANY email** - Fixed backend to accept any email/password combination
+2. **Frontend-backend connection** - Updated Vite proxy configuration
+3. **Tailwind CSS v4** - Fixed @tailwindcss/postcss configuration
+4. **Login endpoint** - Direct database lookup with proper password verification
+5. **Registration endpoint** - Better validation and error handling
 
-You can use this to test the application. Try "Sign in" → enter credentials → explore the dashboard!
+### 🎨 Design Improvements
+- Consistent with dashboard styling (blue gradient button, soft shadows, rounded cards)
+- Light theme with professional appearance
+- Smooth transitions and hover effects
+- Clear visual hierarchy
+- Accessible form inputs with proper focus states
+
+## Testing the Application
+
+### Test Registration
+1. Click "Create one" from login page
+2. Enter: `newuser@example.com` (any email you want)
+3. Enter password (min 8 characters)
+4. Choose role and enter full name
+5. Confirm password
+6. Click "Create Account"
+7. You're logged in with your new account!
+
+### Test Full Features
+1. **Dashboard**: View productivity stats and recent tasks
+2. **Kanban Board**: Create tasks and drag them between columns
+3. **Projects**: Create new projects and add team members
+4. **Calendar**: View tasks by due date
+5. **Analytics**: Check productivity trends
+6. **Time Tracking**: Start timer and track work hours
+7. **Team**: View team member performance
+8. **Settings**: Update profile information
 
 ## Troubleshooting
-- **Port already in use**: Change port in vite.config.js or manage.py command
-- **Database connection error**: Ensure DATABASE_URL environment variable is set
-- **Module not found**: Run `npm install` in frontend or `pip install -r requirements.txt` in backend
-- **CORS errors**: Ensure corsheaders is installed and configured in Django settings
-- **Login fails**: Check that user email exists and password is correct
+
+| Issue | Solution |
+|-------|----------|
+| Port already in use | Change port in vite.config.js or Django manage.py |
+| Database connection error | Ensure DATABASE_URL environment variable is set |
+| Module not found | Run `npm install` (frontend) or install Python dependencies |
+| CORS errors | Verify corsheaders is installed and configured |
+| Login fails | Check email/password and ensure user exists |
+| Registration validation errors | Ensure password is 8+ chars and matches confirmation |
+
+## Demo Content
+
+The test account has been used to create:
+- Sample project with tasks
+- Tasks across different statuses (To Do, In Progress, Review, Done)
+- Activity logs and behavioral events
+- Time tracking entries
+
+---
+
+**Made with Emergent** - TaskFlow is built with the Emergent development framework for rapid prototyping of sophisticated web applications.

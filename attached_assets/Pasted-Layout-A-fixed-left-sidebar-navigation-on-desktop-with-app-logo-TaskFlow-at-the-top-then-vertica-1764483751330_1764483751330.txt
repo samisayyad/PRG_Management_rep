@@ -1,0 +1,29 @@
+Layout: A fixed left sidebar navigation on desktop with app logo ‘TaskFlow’ at the top, then vertical menu items with icons: Dashboard, Kanban Board, Calendar, Projects, Analytics, Time Tracking, Team, Settings. At the very bottom of the sidebar, show the current user card with avatar, name, and role. The main content area should have a top bar containing: a global search input (“Search tasks, projects…”), a “+ Create” primary button on the right, a notifications bell icon, and a circular user avatar.
+
+Pages to design:
+
+Dashboard: At the top show KPI cards for Tasks Completed, Avg Completion Time, Team Productivity, Overdue Tasks, each with percentage change vs last week. Below that, add “AI Productivity Insights” card with 3–4 insight rows, and an “Active Projects” card with a list of projects, progress bars, due dates, and member count pills. At the bottom, a “Recent Tasks” list with status badges (todo, in progress, review, done).
+
+Kanban Board: Four vertical columns labeled “To Do”, “In Progress”, “Review”, “Done”, each with a small icon and colored top border (blue or pastel variants) and a badge with task count. Support drag‑and‑drop tasks between columns. On the right, a “+ Add Task” button. Empty state shows centered icon and copy like ‘No tasks in this column’.
+
+Calendar: A full‑page monthly calendar view in the main area with large date cells. Right side panel shows ‘Unscheduled Tasks’ list and ‘Quick Stats’ (completed this month, overdue, due this week) plus a ‘Due Soon’ section. Include a ‘+ Add Task’ button on the top right of the page content.
+
+Projects: Empty state page with an illustration or folder icon and text ‘No projects yet’ plus a centered ‘+ Create Project’ primary button.
+
+Analytics: Top row of metric cards: Tasks Completed, Completion Rate, Team Productivity, Active Projects, each with small trend indicator (% vs last period). Below, two large cards side‑by‑side for ‘Productivity Trends’ and ‘Task Distribution’, showing empty‑state messages when there is no data. Further down, a ‘Team Performance’ section.
+
+Time Tracking: Large centered timer display (00:00:00) with a dropdown ‘Select Task’, an optional description field, and a disabled ‘Start Timer’ button until a task is selected. On the right, summary cards for Today and This Week showing hours worked, sessions, tasks tracked, and goal progress bar. At the bottom, a ‘Recent Time Entries’ list.
+
+Team: Top row cards for Total Members, Active Tasks, Avg Efficiency, Total Hours. Below, member cards with avatar, name, contact icons, joined date, tasks completed, hours this month, an efficiency bar, and an ‘Inactive/Active’ status label plus ‘View Profile’ link.
+
+Settings: Tabs down the left inside the page (Profile, Notifications, Appearance, Security). Profile tab shows avatar with ‘Change Avatar’, fields for Full Name and Email Address, and a ‘Save Changes’ button.
+
+General interactions and style:
+
+Use consistent card design, pill badges for status and roles, and progress bars for completion and project progress.
+
+Keep everything fully responsive: on smaller screens collapse the sidebar into an icon‑only or hamburger menu and stack cards vertically.
+
+Add small microcopy like ‘No productivity data available’ or ‘No tasks in review’ for empty states.
+
+Place a small ‘Made with Emergent’ badge in the bottom‑right corner of all main pages.”
