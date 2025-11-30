@@ -4,62 +4,135 @@
 TaskFlow is a comprehensive project management application inspired by Jira, featuring behavioral analytics, sprint management, and team collaboration tools. Built with a React frontend and Django backend.
 
 ## Tech Stack
-- **Frontend**: React 18 + Vite, Tailwind CSS, React Router DOM, Lucide React Icons, Chart.js, date-fns
-- **Backend**: Django 4.2, Django REST Framework, JWT Authentication (djangorestframework-simplejwt)
-- **Database**: PostgreSQL (Neon-backed)
+- **Frontend**: React 18 + Vite, Tailwind CSS v4, React Router DOM, Lucide React Icons, Chart.js, date-fns, @hello-pangea/dnd for drag-and-drop
+- **Backend**: Django 4.2, Django REST Framework, JWT Authentication (djangorestframework-simplejwt), django-cors-headers
+- **Database**: PostgreSQL (Neon-backed via DATABASE_URL environment variable)
 - **Authentication**: JWT tokens with role-based access control
 
-## User Roles
-1. **Scrum Master**: Full access to create/manage projects, sprints, tasks, and team members
-2. **Employee**: View assigned tasks, update task status, track time
+## User Roles & Permissions
+- **Scrum Master**: Full access to create/manage projects, sprints, tasks, and team members
+- **Employee**: Limited access - view assigned tasks, update task status, track personal time
 
-## Key Features
-- Kanban board with drag-and-drop
-- Sprint management and backlog planning
-- Calendar view for task deadlines
-- Analytics dashboard with productivity metrics
-- Time tracking
-- Team management
-- Behavioral event tracking for AI insights
+## Key Features Implemented
+✅ User authentication with JWT tokens and role selection  
+✅ Kanban board with drag-and-drop (DnD via @hello-pangea/dnd)  
+✅ Sprint management and backlog planning  
+✅ Calendar view for task deadlines  
+✅ Analytics dashboard with productivity charts  
+✅ Time tracking with timer functionality  
+✅ Team management and performance metrics  
+✅ Behavioral event tracking for analytics  
+✅ Role-based access control on API endpoints  
 
 ## Project Structure
 ```
 /backend
-  /api          - API models, views, serializers
-  /taskflow     - Django settings
-  manage.py     - Django management script
+  /api
+    models.py           - All data models
+    views.py            - DRF viewsets and API endpoints
+    serializers.py      - Serializers for all models
+    permissions.py      - Role-based permission classes
+    urls.py             - API routing
+  /taskflow
+    settings.py         - Django configuration
+    urls.py             - Main URL routing
+  manage.py             - Django CLI
 
 /frontend
   /src
-    /components - Reusable UI components (Sidebar, Header)
-    /context    - React Context (AuthContext)
-    /pages      - Page components (Dashboard, KanbanBoard, etc.)
-    /services   - API service layer
-    App.jsx     - Main application component
-    main.jsx    - Entry point
+    /components         - Reusable UI components (Sidebar, Header, etc.)
+    /context            - React Context (AuthContext for state management)
+    /pages              - Page components (Dashboard, KanbanBoard, Analytics, etc.)
+    /services           - API service layer (axios with interceptors)
+    App.jsx             - Main application routing
+    main.jsx            - Entry point
+  vite.config.js        - Vite dev server config with API proxy
+  tailwind.config.js    - Tailwind CSS configuration
+  postcss.config.js     - PostCSS with @tailwindcss/postcss v4
 ```
 
 ## Running the Application
-- **Backend**: `cd backend && python manage.py runserver 0.0.0.0:8000`
-- **Frontend**: `cd frontend && npm run dev`
+
+**Both workflows are pre-configured and auto-start:**
+- Backend: `cd backend && python manage.py runserver 0.0.0.0:8000`
+- Frontend: `cd frontend && npm run dev`
+
+**Or run manually:**
+```bash
+# Terminal 1: Backend
+cd backend
+python manage.py runserver 0.0.0.0:8000
+
+# Terminal 2: Frontend
+cd frontend
+npm run dev
+```
+
+The frontend is accessible at http://localhost:5000 and proxies API calls to http://localhost:8000
 
 ## API Endpoints
-- `/api/auth/register/` - User registration
-- `/api/auth/login/` - JWT token login
-- `/api/auth/me/` - Get current user
-- `/api/projects/` - CRUD operations for projects
-- `/api/sprints/` - Sprint management
-- `/api/tasks/` - Task management
-- `/api/time-entries/` - Time tracking
-- `/api/analytics/` - Analytics data
-- `/api/behavioral-events/` - Event tracking
+
+### Authentication
+- `POST /api/auth/register/` - Register new user
+- `POST /api/auth/login/` - Login and get JWT tokens
+- `POST /api/auth/refresh/` - Refresh access token
+- `GET /api/users/me/` - Get current user profile
+- `PUT /api/users/me/` - Update user profile
+
+### Projects
+- `GET/POST /api/projects/` - List/create projects
+- `GET/PUT/DELETE /api/projects/{id}/` - Manage individual projects
+- `GET /api/projects/{id}/board/` - Get Kanban board state
+- `GET /api/projects/{id}/backlog/` - Get backlog tasks
+- `GET /api/projects/{id}/members/` - List project members
+- `POST /api/projects/{id}/add_member/` - Add team member
+
+### Sprints
+- `GET/POST /api/sprints/` - List/create sprints
+- `POST /api/sprints/{id}/start/` - Start a sprint
+- `POST /api/sprints/{id}/complete/` - Complete a sprint
+
+### Tasks
+- `GET/POST /api/tasks/` - List/create tasks
+- `GET/PUT/PATCH/DELETE /api/tasks/{id}/` - Manage tasks
+- `POST /api/tasks/{id}/move/` - Update task status and order
+
+### Time Tracking
+- `GET/POST /api/time-entries/` - List/create time entries
+- `POST /api/time-entries/{id}/stop/` - Stop active timer
+
+### Analytics
+- `GET /api/dashboard/stats/` - Dashboard statistics
+- `GET /api/analytics/data/` - Analytics data with charts
+- `GET /api/team/stats/` - Team performance metrics
+- `POST /api/analytics/events/` - Log behavioral events
 
 ## Environment Variables
-- `DATABASE_URL` - PostgreSQL connection string
-- `SESSION_SECRET` - Django secret key
+- `DATABASE_URL` - PostgreSQL connection string (auto-configured on Replit)
+- `SESSION_SECRET` - Django secret key (auto-configured on Replit)
 
-## Recent Changes
-- Initial setup of Django backend with all models and API endpoints
-- React frontend with Tailwind CSS v4 configuration
-- JWT authentication with role-based access control
-- All main pages created: Login, Dashboard, Kanban, Calendar, Projects, Analytics, TimeTracking, Team, Settings
+## Recent Changes (Nov 30, 2025)
+
+### Fixed Issues
+- ✅ Frontend-backend connection: Updated Vite proxy to 127.0.0.1:8000
+- ✅ Tailwind CSS v4: Fixed by installing @tailwindcss/postcss and updating config
+- ✅ Added comprehensive role-based permissions system
+
+### New Features
+- ✅ Permission classes: IsScrumMaster, CanManageProject, CanManageTask, CanManageSprint
+- ✅ All page components: Analytics, TimeTracking, Team, Settings with full UI
+- ✅ Behavioral analytics tracking on tasks created, completed, and status changes
+
+## Testing
+To test the application:
+1. Create a Scrum Master account to get full access
+2. Create a project and add tasks
+3. Use Kanban board to organize work
+4. Try time tracking feature
+5. Check Analytics for productivity insights
+
+## Troubleshooting
+- **Port already in use**: Change port in vite.config.js or manage.py command
+- **Database connection error**: Ensure DATABASE_URL environment variable is set
+- **Module not found**: Run `npm install` in frontend or `pip install -r requirements.txt` in backend
+- **CORS errors**: Ensure corsheaders is installed and configured in Django settings

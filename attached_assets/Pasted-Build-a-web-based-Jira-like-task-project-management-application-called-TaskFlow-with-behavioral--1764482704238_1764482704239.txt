@@ -1,0 +1,285 @@
+Build a web-based Jira-like task & project management application called “TaskFlow” with behavioral analytics as described below.
+Use the following technology stack (don’t change it):
+Frontend: React (functional components, hooks, React Router), modern UI (you may use Tailwind CSS or equivalent utility-first CSS).
+Backend: Python Django (Django REST Framework for APIs).
+Database: PostgreSQL.
+Analytics & Data Processing: Pandas in the backend for aggregations and analysis.
+Charts: Chart.js or D3.js in the frontend for graphs.
+Other: JWT-based auth, RESTful APIs, Git support, ready for deployment on a cloud platform (e.g., Heroku/AWS).
+Follow the steps and structure exactly as given.
+
+1. CORE CONCEPT
+Build a Jira-like agile task management tool that combines:
+Standard Jira features
+Projects with boards (Scrum / Kanban).
+Issues/tasks with types, statuses, priorities, assignees, comments, attachments.
+Backlog, active sprints, and board view.
+Workflow transitions (To Do → In Progress → Review → Done).
+User roles & permissions.
+Basic reports (burndown, task counts, etc.).
+TaskFlow behavioral analytics features from the PDF
+Capture user behavior: time spent on tasks, update frequency, completion patterns, drag/drop events, etc.
+Analytics dashboard with charts and metrics.
+Productivity insights and suggestions (e.g., focus tips, best time to work, daily summaries).
+
+2. USER ROLES & AUTHENTICATION
+Implement authentication & authorization with JWT.
+Roles (from the PDF + Jira analogy)
+Problem_Statement
+Scrum Master (Project Admin)
+Create / edit / archive projects.
+Configure project settings and workflows.
+Add/remove Employees to projects.
+Create any task within their projects.
+Assign tasks to Employees.
+View project-wide analytics and reports.
+Employee (Worker / Developer)
+Can view only projects they belong to.
+Can see tasks assigned to them + other tasks in their projects.
+Can create tasks if allowed by project settings.
+Can update status, description, log work/time, add comments and attachments on their assigned tasks.
+Cannot change project membership or global settings.
+Auth features
+Signup, login, logout.
+Password hashing.
+Refresh tokens.
+Role stored in user profile.
+
+3. DATA MODEL (BACKEND – DJANGO + POSTGRES)
+Design Django models & migrations for at least:
+User
+id, name, email, password, role (Scrum Master / Employee), avatar, created_at.
+Project
+id, name, key (short code like JIRA), description, created_by (Scrum Master), created_at, updated_at.
+Many-to-many relation with Users (project members with role per project if needed).
+Workflow / Status
+Predefined statuses: “Backlog”, “To Do”, “In Progress”, “Review”, “Done”.
+Allow projects to customize workflow (optional).
+Issue / Task
+id, project, title, description (rich text), issue_type (Story, Task, Bug, Epic, Sub-task).
+priority (Low, Medium, High, Critical).
+status (linked to Workflow/Status).
+reporter (who created).
+assignee (user).
+story_points or estimated_hours.
+due_date, start_date.
+created_at, updated_at.
+labels/tags (string array or separate Tag model).
+sprint (nullable).
+parent_issue (for sub-tasks).
+Sprint (for Scrum)
+id, project, name, goal, start_date, end_date, is_active, is_completed.
+Comment
+id, issue, author, content, created_at.
+Attachment
+id, issue, file path, uploaded_by, uploaded_at.
+Activity Log / History (from PDF’s requirement)
+id, issue, user, action_type (status_changed, description_edited, comment_added, assigned_changed, etc.).
+from_value, to_value.
+timestamp.
+Behavioral Tracking / Event Log
+id, user, issue, project.
+event_type (task_opened, task_closed_view, status_drag_drop, started_timer, stopped_timer, comment_added, etc.).
+duration_seconds (for time spent viewing/working on a task).
+timestamp.
+optional metadata JSON field.
+Reminder / Notification
+id, user, issue, reminder_time, type (due_soon, overdue, daily_summary), is_sent.
+Analytics Snapshot / Suggestions (Optional but preferred)
+id, user, date_range, summary text, metrics JSON (e.g., tasks_completed, avg_time_in_status).
+suggestion_type (focus_tip, scheduling_tip, workload_balance).
+
+4. BACKEND API DESIGN (DJANGO REST FRAMEWORK)
+Create RESTful endpoints (prefix /api/) for:
+Auth
+POST /auth/register
+POST /auth/login
+POST /auth/logout
+POST /auth/refresh
+Users & Roles
+GET /users/me
+PUT /users/me
+GET /users (Scrum Master only in their projects).
+Assign user role per project if needed.
+Projects
+GET /projects (only those user is member of).
+POST /projects (Scrum Master).
+GET /projects/{id}
+PUT /projects/{id}
+DELETE /projects/{id}
+POST /projects/{id}/members (add/remove members).
+Sprints
+CRUD sprints per project.
+Endpoint to start and complete a sprint, and move unfinished tasks to backlog/next sprint.
+Issues / Tasks
+GET /projects/{id}/issues
+POST /projects/{id}/issues
+GET /issues/{id}
+PUT /issues/{id} (with validation based on role and status).
+DELETE /issues/{id}
+PATCH endpoints for status transitions and for drag/drop board actions.
+Endpoint to log work/time.
+Comments & Attachments
+CRUD comments: /issues/{id}/comments
+Upload/download attachments: /issues/{id}/attachments
+Kanban / Board View API
+GET /projects/{id}/board → returns columns with issues grouped by status, ordered for drag/drop.
+PATCH /board/move → handle drag/drop with new column & order; log activity + behavioral event.
+Backlog & Sprint Planning
+GET /projects/{id}/backlog
+POST /projects/{id}/backlog/add-to-sprint
+Calendar View
+GET /users/me/calendar → tasks with due_date or start_date within a range.
+Behavioral Analytics & Dashboard APIs (from PDF)
+Endpoint(s) to return:
+Number of tasks created/completed per day/week.
+Average time tasks stay in each status.
+Time spent per issue and per project by a user.
+Update frequency (how often user changes tasks).
+Productivity trends (e.g., completion over time).
+Endpoint(s) to return suggestions:
+Times of day where user is most productive.
+Overloaded users (too many in-progress tasks).
+Daily summary for user with “focus tasks” for today.
+Notifications / Reminders
+Endpoint to schedule reminders.
+Background job (or simulated cron) that checks due dates and sends reminders (email placeholder or in-app).
+
+5. FRONTEND – PAGE & COMPONENT STRUCTURE (REACT)
+Use React Router with a clean layout. Create at least these pages & main components:
+Auth Pages
+Login page.
+Register page.
+Simple protected route system.
+Main Layout
+Top navigation bar (app name, user menu).
+Sidebar similar to Jira’s left nav with links:
+Projects / Boards
+Backlog
+Calendar
+Analytics
+Settings
+Project List Page
+Shows all projects user has access to.
+“Create Project” button for Scrum Masters.
+Cards or table with project status, number of open tasks.
+Project Detail Layout
+Tabs or sub-navigation:
+Board
+Backlog
+Calendar
+Reports / Analytics
+Settings (Scrum Master only)
+Kanban Board Page (Core Jira-like Feature)
+Columns: To Do, In Progress, Review, Done (configurable).
+Task cards with:
+Title, key (e.g., PROJ-1), priority, assignee avatar, due date, labels.
+Drag & drop between columns (updates status via API).
+Quick filters: “My Issues”, “Only Bugs”, “By Sprint”.
+On card click → open task details drawer/modal.
+Backlog & Sprint Planning Page (Scrum)
+List view of issues in backlog.
+Create and edit issues inline.
+Create / edit sprints: name, dates, goal.
+Drag tasks from backlog into a selected sprint.
+“Start Sprint” button.
+Issue Detail View
+Appears as a modal or separate page.
+Shows:
+Title, key, type, priority, status.
+Description (rich text).
+Project, sprint.
+Assignee & reporter.
+Dates and story points.
+Tabs/sections:
+Activity Log – chronological timeline of all changes.
+Comments – thread with @mentions.
+Attachments – upload/view files.
+Buttons to:
+Change status (Jira-like status dropdown).
+Log work/time.
+Edit task.
+Whenever the issue detail is opened/closed, record behavioral events (time spent).
+Calendar View
+Monthly/weekly calendar displaying tasks by due_date or start_date.
+Color-code by status or priority.
+Clicking an item opens the issue detail.
+Filter by project, status, assignee.
+Analytics Dashboard (For User & For Project)
+Implement using Chart.js or D3.js with data from analytics APIs.
+For individual user:
+Line chart of tasks completed per day/week.
+Bar chart of time spent by status (To Do vs In Progress vs Review vs Done).
+Pie/donut chart of work distribution across projects.
+Productivity trend: e.g., average completion time.
+For Scrum Master / Project:
+Burndown chart for active sprint.
+Cumulative flow diagram (issues across statuses over time).
+Table of users with:
+Tasks assigned, in progress, completed.
+Average cycle time.
+Highlight potential bottlenecks (e.g., too many tasks in Review).
+Suggestions / Insights Panel
+On dashboard, show cards like:
+“You complete most tasks between 10–12 AM. Try scheduling focused work during this time.”
+“You have 5 tasks in ‘In Progress’. Consider finishing some before starting new ones.”
+Use backend analytics endpoints to generate suggestion text.
+User Profile Page
+View/update profile details.
+Show personal stats summary (“Last 7 days: X tasks completed, Y hours logged”).
+
+6. BEHAVIORAL DATA CAPTURE (IMPORTANT)
+Implement in frontend & backend:
+When a user:
+Opens an issue.
+Keeps an issue open for some time (track time spent).
+Drags a card between columns.
+Completes a task.
+Edits description or adds a comment.
+Send appropriate events to backend:
+Endpoint e.g. POST /analytics/events
+Payload: user_id, issue_id, project_id, event_type, duration, timestamp, optional metadata.
+Backend:
+Store events in Behavioral Event model.
+Use scheduled/background tasks or on-demand queries with Pandas to compute aggregated metrics and suggestions.
+This behavioral analytics and optimization layer is mandatory and should follow the PDF description.
+
+7. WORKFLOW & JIRA-LIKE BEHAVIOR
+Model Jira-like workflow and behavior:
+Statuses & Transitions
+Default: Backlog → To Do → In Progress → Review → Done.
+Validate transitions on backend (cannot jump from Backlog directly to Done unless rule allows).
+Sprint Flow
+Backlog issues → Added to Sprint → Active Sprint tracking → Sprint completion.
+After sprint completion: generate a sprint summary and move unfinished issues back to backlog or next sprint.
+Notifications
+Basic notification system:
+When issue is assigned to a user.
+When status changes to “Review” or “Done”.
+When due date is near or missed.
+Implement as in-app notification list; email sending can be stubbed.
+
+8. TESTING & DEPLOYMENT
+Add unit tests and basic integration tests for:
+Auth.
+CRUD operations for projects, issues, sprints.
+Board drag/drop update.
+Behavioral event logging.
+Prepare environment configuration for:
+Local development using SQLite as an option, but production targeting PostgreSQL.
+Environment variables for DB, secret keys, and CORS.
+Provide instructions (README) for:
+Backend setup (Django migrations, superuser creation).
+Frontend setup (install, run dev server, build).
+Running both with a common base URL (/api for backend).
+
+9. GENERAL REQUIREMENTS
+Code must be clean, modular, and well-commented.
+Use javaScript on the frontend if possible, but plain JS is acceptable if required.
+Ensure responsive UI (desktop and laptop layouts, at least).
+Keep the design similar in spirit to Jira / the reference board image (left sidebar, main board, cards in columns).
+Do not skip behavioral analytics or roles; they are essential.
+
+Generate all necessary backend and frontend code, file structures, configuration, and instructions to implement this complete TaskFlow Jira-like task management and behavioral analytics platform, strictly following the step-by-step specifications above.
+
+first generate all backend and frontend file structure and after we can proceed with code structure
