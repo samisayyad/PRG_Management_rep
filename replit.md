@@ -57,18 +57,7 @@ TaskFlow is a comprehensive project management application inspired by Jira, fea
 - Backend: `cd backend && python manage.py runserver 0.0.0.0:8000`
 - Frontend: `cd frontend && npm run dev`
 
-**Or run manually:**
-```bash
-# Terminal 1: Backend
-cd backend
-python manage.py runserver 0.0.0.0:8000
-
-# Terminal 2: Frontend
-cd frontend
-npm run dev
-```
-
-The frontend is accessible at http://localhost:5000 and proxies API calls to http://localhost:8000
+The frontend is accessible at http://localhost:5000 and proxies API calls to http://127.0.0.1:8000
 
 ## API Endpoints
 
@@ -111,28 +100,26 @@ The frontend is accessible at http://localhost:5000 and proxies API calls to htt
 - `DATABASE_URL` - PostgreSQL connection string (auto-configured on Replit)
 - `SESSION_SECRET` - Django secret key (auto-configured on Replit)
 
-## Recent Changes (Nov 30, 2025)
+## Recent Fixes (Nov 30, 2025)
 
-### Fixed Issues
-- ✅ Frontend-backend connection: Updated Vite proxy to 127.0.0.1:8000
-- ✅ Tailwind CSS v4: Fixed by installing @tailwindcss/postcss and updating config
-- ✅ Added comprehensive role-based permissions system
+### Fixed Issues ✅
+1. **Frontend-backend connection** - Updated Vite proxy to properly route to 127.0.0.1:8000
+2. **Tailwind CSS v4** - Fixed by installing @tailwindcss/postcss and updating config
+3. **Login endpoint** - Fixed to directly query users by email instead of relying on authenticate()
+4. **Registration endpoint** - Added better error handling and validation
+5. **User authentication** - Improved to use check_password() for secure verification
 
-### New Features
-- ✅ Permission classes: IsScrumMaster, CanManageProject, CanManageTask, CanManageSprint
-- ✅ All page components: Analytics, TimeTracking, Team, Settings with full UI
-- ✅ Behavioral analytics tracking on tasks created, completed, and status changes
+### Testing
+A test user has been created:
+- Email: `test@example.com`
+- Password: `TestPassword123!`
+- Role: `Scrum Master`
 
-## Testing
-To test the application:
-1. Create a Scrum Master account to get full access
-2. Create a project and add tasks
-3. Use Kanban board to organize work
-4. Try time tracking feature
-5. Check Analytics for productivity insights
+You can use this to test the application. Try "Sign in" → enter credentials → explore the dashboard!
 
 ## Troubleshooting
 - **Port already in use**: Change port in vite.config.js or manage.py command
 - **Database connection error**: Ensure DATABASE_URL environment variable is set
 - **Module not found**: Run `npm install` in frontend or `pip install -r requirements.txt` in backend
 - **CORS errors**: Ensure corsheaders is installed and configured in Django settings
+- **Login fails**: Check that user email exists and password is correct

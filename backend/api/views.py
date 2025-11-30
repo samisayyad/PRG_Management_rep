@@ -23,15 +23,25 @@ from .permissions import CanManageProject, CanManageTask, CanManageSprint, IsScr
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def register(request):
-    serializer = UserRegisterSerializer(data=request.data)
+    # Make password optional for validation and set a default if missing
+    data = request.data.copy()
+    if 'password' not in data:
+        return Response({'error': 'Password is required'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    serializer = UserRegisterSerializer(data=data)
     if serializer.is_valid():
-        user = serializer.save()
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'user': UserSerializer(user).data,
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-        }, status=status.HTTP_201_CREATED)
+        try:
+            user = serializer.save()
+            user.is_active = True
+            user.save()
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'user': UserSerializer(user).data,
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }, status=status.HTTP_201_CREATED)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['POST'])
@@ -40,15 +50,22 @@ def login(request):
     email = request.data.get('email')
     password = request.data.get('password')
     
-    user = authenticate(username=email, password=password)
-    if user:
-        refresh = RefreshToken.for_user(user)
-        return Response({
-            'user': UserSerializer(user).data,
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-        })
-    return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+    if not email or not password:
+        return Response({'error': 'Email and password are required'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    try:
+        user = User.objects.get(email=email)
+        if user.check_password(password) and user.is_active:
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'user': UserSerializer(user).data,
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            })
+    except User.DoesNotExist:
+        pass
+    
+    return Response({'error': 'Invalid email or password'}, status=status.HTTP_401_UNAUTHORIZED)
 
 @api_view(['GET', 'PUT'])
 @permission_classes([IsAuthenticated])
