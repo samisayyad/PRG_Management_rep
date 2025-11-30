@@ -61,7 +61,7 @@ export default function Layout({ children }) {
           </Link>
         </div>
 
-        <nav className="flex-1 overflow-y-auto p-4 space-y-1">
+        <nav className="flex-1 overflow-y-auto px-3 py-6 space-y-3">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
@@ -69,33 +69,22 @@ export default function Layout({ children }) {
                 key={item.path}
                 to={item.path}
                 title={sidebarOpen ? '' : item.label}
-                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium group ${
+                className={`flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-300 font-medium group ${
                   isActive
                     ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md'
                     : 'text-gray-600 hover:bg-gray-100 group-hover:bg-gray-50'
                 } ${sidebarOpen ? 'justify-start' : 'justify-center'}`}
               >
-                <item.icon className="w-5 h-5 flex-shrink-0" />
-                {sidebarOpen && <span className="text-sm">{item.label}</span>}
+                <item.icon className="w-6 h-6 flex-shrink-0" />
+                {sidebarOpen && <span className="text-sm font-medium">{item.label}</span>}
               </Link>
             );
           })}
         </nav>
 
-        <div className="p-3 border-t border-gray-200 mt-auto space-y-2">
-          <button
-            onClick={() => setSidebarOpen(!sidebarOpen)}
-            className="w-full flex items-center justify-center gap-3 px-3 py-3 rounded-lg hover:bg-gray-100 transition-colors"
-            title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
-          >
-            {sidebarOpen ? (
-              <ChevronLeft className="w-5 h-5 text-gray-600" />
-            ) : (
-              <Menu className="w-5 h-5 text-gray-600" />
-            )}
-          </button>
-          <div className={`flex items-center gap-3 px-3 py-3 bg-gray-50 rounded-lg ${sidebarOpen ? '' : 'justify-center'}`}>
-            <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+        <div className="p-4 border-t border-gray-200 mt-auto space-y-3">
+          <div className={`flex items-center gap-3 px-4 py-4 bg-gray-50 rounded-xl ${sidebarOpen ? '' : 'justify-center'}`}>
+            <div className="w-11 h-11 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
               {getInitials(displayName)}
             </div>
             {sidebarOpen && (
@@ -105,11 +94,25 @@ export default function Layout({ children }) {
               </div>
             )}
           </div>
+          <button
+            onClick={() => setSidebarOpen(!sidebarOpen)}
+            className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors text-gray-700 font-medium"
+            title={sidebarOpen ? 'Collapse sidebar' : 'Expand sidebar'}
+          >
+            {sidebarOpen ? (
+              <>
+                <ChevronLeft className="w-5 h-5" />
+                <span>Collapse</span>
+              </>
+            ) : (
+              <Menu className="w-5 h-5" />
+            )}
+          </button>
         </div>
       </aside>
 
       {/* Main Content */}
-      <div className={`min-h-screen flex flex-col transition-all duration-300 ease-in-out ${
+      <div className={`flex-1 min-h-screen flex flex-col transition-all duration-300 ease-in-out ${
         sidebarOpen ? 'ml-64' : 'ml-20'
       }`}>
         {/* Header */}
@@ -185,7 +188,7 @@ export default function Layout({ children }) {
         </header>
 
         {/* Page Content */}
-        <main className="p-8 overflow-y-auto">
+        <main className="flex-1 p-8 overflow-y-auto w-full">
           {children}
         </main>
       </div>
