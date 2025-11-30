@@ -61,7 +61,7 @@ export default function Layout({ children }) {
           </Link>
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-3 py-6 space-y-3">
+        <nav className="flex-1 overflow-y-auto px-3 py-8 space-y-5">
           {navItems.map((item) => {
             const isActive = location.pathname === item.path;
             return (
@@ -69,7 +69,7 @@ export default function Layout({ children }) {
                 key={item.path}
                 to={item.path}
                 title={sidebarOpen ? '' : item.label}
-                className={`flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-300 font-medium group ${
+                className={`flex items-center gap-4 px-4 py-5 rounded-xl transition-all duration-300 font-medium group ${
                   isActive
                     ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md'
                     : 'text-gray-600 hover:bg-gray-100 group-hover:bg-gray-50'
