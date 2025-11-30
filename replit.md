@@ -128,6 +128,22 @@ The frontend is accessible at http://localhost:5000 and proxies API calls to htt
 
 ## Recent Changes (Nov 30, 2025)
 
+### ✨ Layout & Spacing Fixes
+- **Sidebar** expanded from w-48 to w-64 with proper fixed positioning (z-40)
+- **Main content offset** properly aligned with ml-64 to prevent overlap/merging
+- **Content padding** increased to p-8 for better component visibility
+- **Header** enhanced with z-30 (sticky top) and improved styling
+- **Navigation items** better spaced and readable
+- **User profile section** styled with bg-gray-50 background card
+
+### ✨ Team Page Enhancements
+- **Add Member Modal** fully implemented with project selection and email input
+- **Error handling** with alert component for failed member additions
+- **Team members display** with individual performance stats cards
+- **Member efficiency charts** with visual progress bars
+- **Status indicators** showing active/inactive members
+- **Empty state** with helpful messaging and Add Member button
+
 ### ✨ Major UI Redesign - Authentication Pages
 - **Beautiful gradient background** with soft blur effects
 - **Centered card layout** with shadow and border styling
@@ -140,11 +156,13 @@ The frontend is accessible at http://localhost:5000 and proxies API calls to htt
 - **Fully responsive** design for all screen sizes
 
 ### ✅ Fixed Issues
-1. **Authentication works with ANY email** - Fixed backend to accept any email/password combination
+1. **Authentication** - Works with ANY email/password combination, fixed serializer validation
 2. **Frontend-backend connection** - Updated Vite proxy configuration
 3. **Tailwind CSS v4** - Fixed @tailwindcss/postcss configuration
-4. **Login endpoint** - Direct database lookup with proper password verification
-5. **Registration endpoint** - Better validation and error handling
+4. **Sidebar merging** - Fixed layout spacing and proper ml-64 offset
+5. **Add Member functionality** - Fully implemented modal with form validation
+6. **Registration endpoint** - Better validation and error handling
+7. **Role-based permissions** - Scrum Master can create projects, Employees have read-only access
 
 ### 🎨 Design Improvements
 - Consistent with dashboard styling (blue gradient button, soft shadows, rounded cards)
@@ -152,6 +170,7 @@ The frontend is accessible at http://localhost:5000 and proxies API calls to htt
 - Smooth transitions and hover effects
 - Clear visual hierarchy
 - Accessible form inputs with proper focus states
+- Better spacing between all components
 
 ## Testing the Application
 
