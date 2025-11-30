@@ -44,9 +44,9 @@ export default function Layout({ children }) {
     : user?.email || 'User';
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 flex flex-col fixed h-screen top-0 left-0 z-50 overflow-y-auto">
+      <aside className="w-64 bg-gradient-to-b from-white via-white to-blue-50 border-r border-gray-100 flex flex-col fixed h-screen top-0 left-0 z-50 overflow-y-auto shadow-lg">
         <div className="p-5 border-b border-gray-200">
           <Link to="/dashboard" className="flex items-center gap-2">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center flex-shrink-0">
@@ -63,10 +63,10 @@ export default function Layout({ children }) {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-colors font-medium ${
+                className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-300 font-medium group ${
                   isActive
-                    ? 'bg-blue-50 text-blue-600'
-                    : 'text-gray-600 hover:bg-gray-100'
+                    ? 'bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md'
+                    : 'text-gray-600 hover:bg-gray-100 group-hover:bg-gray-50'
                 }`}
               >
                 <item.icon className="w-5 h-5 flex-shrink-0" />
@@ -92,7 +92,7 @@ export default function Layout({ children }) {
       {/* Main Content */}
       <div className="ml-64 min-h-screen flex flex-col">
         {/* Header */}
-        <header className="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-8 sticky top-0 z-40 shadow-sm">
+        <header className="bg-gradient-to-r from-white via-blue-50 to-white border-b border-gray-100 h-16 flex items-center justify-between px-8 sticky top-0 z-40 shadow-md backdrop-blur-sm">
           <div className="flex items-center gap-4 flex-1">
             <div className="relative flex-1 max-w-xl">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
@@ -105,7 +105,7 @@ export default function Layout({ children }) {
           </div>
 
           <div className="flex items-center gap-4">
-            <button className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium text-sm">
+            <button className="flex items-center gap-2 px-5 py-2 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 font-medium text-sm transform hover:scale-105">
               <Plus className="w-4 h-4" />
               <span>Create</span>
             </button>

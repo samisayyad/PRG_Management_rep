@@ -131,47 +131,54 @@ export default function Dashboard() {
         </div>
         <Link
           to="/kanban"
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          className="flex items-center gap-2 px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 font-medium transform hover:scale-105"
         >
           <Plus className="w-4 h-4" />
           <span>Create Task</span>
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {statCards.map((stat, index) => (
-          <div key={index} className="bg-white rounded-xl p-5 border border-gray-200">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm text-gray-500">{stat.label}</span>
-              <div className={`w-10 h-10 ${stat.iconBg} rounded-lg flex items-center justify-center`}>
-                <stat.icon className={`w-5 h-5 ${stat.iconColor}`} />
+          <div key={index} className="card-hover bg-gradient-to-br from-white to-gray-50 rounded-2xl p-6 border border-gray-100 shadow-md hover:shadow-xl">
+            <div className="flex items-center justify-between mb-4">
+              <span className="text-sm font-semibold text-gray-600">{stat.label}</span>
+              <div className={`w-12 h-12 ${stat.iconBg} rounded-xl flex items-center justify-center transform transition-transform group-hover:scale-110`}>
+                <stat.icon className={`w-6 h-6 ${stat.iconColor}`} />
               </div>
             </div>
-            <div className="flex items-end gap-2">
-              <span className="text-2xl font-bold text-gray-900">{stat.value}</span>
-              <span className={`text-sm flex items-center ${
-                stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
-              }`}>
-                {stat.changeType === 'positive' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
-                {stat.change}
-              </span>
+            <div className="space-y-2">
+              <div className="flex items-end gap-3">
+                <span className="text-4xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">{stat.value}</span>
+                <span className={`text-sm font-semibold flex items-center gap-1 ${
+                  stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
+                }`}>
+                  {stat.changeType === 'positive' ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
+                  {stat.change}
+                </span>
+              </div>
+              <p className="text-xs text-gray-500">vs last week</p>
             </div>
-            <p className="text-xs text-gray-400 mt-1">vs last week</p>
           </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-semibold text-gray-900">AI Productivity Insights</h2>
-            <BarChart3 className="w-5 h-5 text-gray-400" />
+        <div className="card-hover bg-gradient-to-br from-white via-blue-50 to-white rounded-2xl border border-gray-100 p-8 shadow-md hover:shadow-xl">
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h2 className="text-2xl font-bold text-gray-900">AI Productivity Insights</h2>
+              <p className="text-sm text-gray-500 mt-1">Performance metrics & recommendations</p>
+            </div>
+            <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-50 rounded-xl">
+              <BarChart3 className="w-6 h-6 text-blue-600" />
+            </div>
           </div>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {insightCards.map((insight, index) => (
-              <div key={index} className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
-                <div className={`w-10 h-10 ${insight.iconBg} rounded-lg flex items-center justify-center`}>
-                  <insight.icon className={`w-5 h-5 ${insight.iconColor}`} />
+              <div key={index} className="flex items-center gap-4 p-4 bg-gradient-to-r from-gray-50 to-transparent rounded-xl border border-gray-100 hover:border-blue-200 transition-all">
+                <div className={`w-12 h-12 ${insight.iconBg} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                  <insight.icon className={`w-6 h-6 ${insight.iconColor}`} />
                 </div>
                 <div className="flex-1">
                   <p className="font-medium text-gray-900">{insight.title}</p>
